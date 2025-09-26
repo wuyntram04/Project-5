@@ -1,0 +1,344 @@
+#include <iostream>
+#include<vector>
+#include<fstream>
+#include<sstream>
+#include "input.h"
+#include"Student.h"
+#include "Application.h"
+using namespace std;
+
+void mainMenu();
+void VectorFunction();
+void VectorMenu();
+void VectorListContainer();
+void menu3();
+int main()
+{
+
+	do
+	{
+		system("cls");
+		mainMenu();
+		switch (inputInteger("\n\tOption: ", 0, 3))
+		{
+		case 1: VectorFunction();
+			break;
+		case 2:
+			break;
+		case 3: VectorListContainer();
+			break;
+		case 0: exit(0);
+		}
+
+	} while (true);
+
+	return EXIT_SUCCESS;
+
+}
+
+void mainMenu()
+{
+	cout << "\n\tCMPR131 Chapter 5: Vector and List Container by Khang Quach, Tram Ho, Quynh Pham (09/24/2025) ";
+	cout << "\n\t" << string(80, char(205));
+	cout << "\n\t\t1> Vector container";
+	cout << "\n\t\t2> List container";
+	cout << "\n\t\t3> Application using Vector and/or List container";
+	cout << "\n\t" << string(80, char(196));
+	cout << "\n\t\t0> Exit";
+	cout << "\n\t" << string(80, char(205));
+}
+
+void VectorMenu()
+{
+	cout << "\n\tVectors are sequence containers representing arrays that can change in size.\n";
+	cout << "\n\t1> Vector's member functions";
+	cout << "\n\t" << string(107, char(205));
+	cout << "\n\t\tA> clear() - Removes all elements from the vector (which are destroyed)\n";
+	cout << "\t\tB> reserve(n) - Requests that the vector capacity be at least enough to contain n elements\n";
+	cout << "\t\tC> resize(n) - Resizes the container so that it contains n elements\n";
+	cout << "\t\tD> Read input.dat and push_back(e) - Adds a new element at the end of the vector\n";
+	cout << "\t\tE> pop_back() - Removes the last element in the vector\n";
+	cout << "\t\tF> front() - Returns a reference to the first element in the vector\n";
+	cout << "\t\tG> back() - Returns a reference to the last element in the vector\n";
+	cout << "\t\tH> index using at() or [] - Returns a reference to the element at position n in the vector\n";
+	cout << "\t\tI> begin() - Returns an iterator pointing to the first element in the vector\n";
+	cout << "\t\tJ> end() Returns an iterator referring to the past-the-end element in the vector\n";
+	cout << "\t\tK> Using iterator begin() and end() returns all elements in the vector\n";
+	cout << "\t\tL> rbegin() - Returns a reverse iterator pointing to the last element in the vector\n";
+	cout << "\t\tM> rend() - Returns a reverse iterator pointing to the theoretical element preceding the first\n";
+	cout << "\t\t            element in the vector\n";
+	cout << "\t\tN> Using iterator rbegin() and rend() returns all elements in the vector\n";
+	cout << "\t\tO> erase(it) - Removes from the vector a single element(using an iterator)\n";
+	cout << "\t\tP> erase(start_it,end_it) - Removes from the vector a range of elements( using iterators)\n";
+	cout << "\t\tQ> insert(it, entry) - Insert a new entry at the iterator.\n";
+	cout << "\t\tR> swap() - Exchanges the content of the container by another vector's content of the same type\n";
+	cout << "\t\tS> Sort - Sorts the vector.";
+	cout << "\n\t" << string(107, char(196));
+	cout << "\n\t\t0> return";
+	cout << "\n\t" << string(107, char(205));
+}
+
+void VectorFunction()
+{
+	vector<student> v;
+	do {
+		system("cls");
+		VectorMenu();
+		switch (toupper(inputChar("\n\tOption: ")))
+		{
+		case 'A':
+		{
+
+			v.clear();
+			if (v.empty())
+			{
+				cout << "\n\tThe vector now has " << v.size() << " elements.";
+				cout << "\n\n\tThe vector has been cleared.";
+			}
+		}
+		break;
+		case 'B':
+		{
+			int n = inputInteger("\n\tEnter the capacity(1..100): ", 1, 100);
+			v.reserve(n);
+			cout << "\n\tThe vector currently holds " << v.size() << " element(s).";
+			cout << "\n\tThe vector's capacity (reserved space) is " << v.capacity() << " element(s).\n";
+			//number of elements it can store without reallocating
+
+		}
+		break;
+		case 'C':
+		{
+			int s = inputInteger("\n\tEnter the new size(1..100): ", 1, 100);
+			v.resize(s);
+
+			cout << "\n\tThe vector has been resized to " << v.size() << " element(s).\n\n";
+
+			for (int i = 0; i < v.size(); i++)
+			{
+				cout << "\t[" << i << "]: " << v[i] << "\n";
+			}
+			/*  If new_size < old_size → shrink, remove from the end.
+
+				If new_size > old_size → grow, add default - constructed elements(unknown, unknown, 0.0 in your case).
+
+				If new_size == old_size → nothing happens.
+
+				once you shrink a vector with resize() (or erase()), the elements that were removed
+
+				are destroyed — their memory is gone. There is no automatic way to recover them.
+
+
+			*/
+		}
+		break;
+		case 'D':
+		{
+			/*ifstream fin("input.dat", ios::binary);
+			if (!fin) {
+				cout << "The input file, INPUT.DAT, does not exist.\n";
+				break;
+			}
+
+			v.clear();
+			while (true) {
+				size_t nameLen, gradeLen;
+				if (!fin.read((char*)&nameLen, sizeof(nameLen))) break;
+
+				string name(nameLen, '\0');
+				fin.read(&name[0], nameLen);
+
+				fin.read((char*)&gradeLen, sizeof(gradeLen));
+				string grade(gradeLen, '\0');
+				fin.read(&grade[0], gradeLen);
+
+				double gpa;
+				fin.read((char*)&gpa, sizeof(gpa));
+
+				student s;
+				s.setName(name);
+				s.setGradeLevel(grade);
+				s.setGPA(gpa);
+
+				v.push_back(s);
+			}
+			fin.close();
+
+			cout << "\n\tThe vector now has " << v.size() << " elements.\n\n";
+			for (size_t i = 0; i < v.size(); i++) {
+				cout << "\t[" << i << "]: " << v[i] << "\n";
+			}
+			break;*/
+
+			ifstream fin("input.dat");
+			if (!fin) {
+				cout << "The input file, INPUT.DAT, does not exist.\n";
+				break;
+			}
+
+			string line;
+			v.clear();
+
+			while (getline(fin, line))
+			{
+
+				if (line.empty()) continue;
+
+				stringstream ss(line);
+				string name, grade, gpaStr;
+
+				getline(ss, name, ',');
+				getline(ss, grade, ',');
+				getline(ss, gpaStr);
+
+				// trim leading spaces
+				if (!name.empty() && name[0] == ' ') name.erase(0, 1);
+				if (!grade.empty() && grade[0] == ' ') grade.erase(0, 1);
+
+				double gpa = stod(gpaStr);
+
+				student s;
+				s.setName(name);
+				s.setGradeLevel(grade);
+				s.setGPA(gpa);
+
+				v.push_back(s);
+			}
+			fin.close();
+
+			cout << "\n\tThe vector now has " << v.size() << " elements.\n\n";
+			for (size_t i = 0; i < v.size(); i++) {
+				cout << "\t[" << i << "]: " << v[i] << "\n";
+			}
+			break;
+		}
+		case 'E':
+		{
+			if (!v.empty()) {
+				cout << "\n\tElement [" << v.size() - 1 << "]: " << v.back()
+					<< ", has been removed from the vector.\n";
+				v.pop_back();
+			}
+			else
+			{
+				cout << "\n\tThe vector is already empty. Nothing to remove.\n";
+			}
+
+			cout << "\n\tThe vector now has " << v.size() << " element(s).\n\n";
+			for (size_t i = 0; i < v.size(); i++)
+			{
+				cout << "\t[" << i << "]: " << v[i] << "\n";
+			}
+			break;
+		}
+		case 'F':
+		{
+			if (!v.empty())
+			{
+				cout << "\n\tThe first element in the vector is:\n";
+				cout << "\t[0]: " << v.front() << "\n";
+			}
+			else
+			{
+				cout << "\n\tThe vector is empty. No first element.\n";
+			}
+			break;
+		}
+		case 'G':
+		{
+			if (!v.empty())
+			{
+				cout << "\n\tThe last element in the vector is:\n";
+				cout << "\t[" << v.size() - 1 << "]: " << v.back() << "\n";
+			}
+			else {
+				cout << "\n\tThe vector is empty. No last element.\n";
+			}
+			break;
+		}
+		case 'H':
+		{
+			if (!v.empty())
+			{
+				int last = v.size() - 1;
+				int index = inputInteger("\n\tEnter the index (0.." + to_string(v.size() - 1) + "): ", 0, last);
+
+				if (index < v.size()) {
+					cout << "\n\tElement at [" << index << "] using at(): " << v.at(index) << "\n";
+					cout << "\tElement at [" << index << "] using []  : " << v[index] << "\n";
+				}
+				else {
+					cout << "\n\tInvalid index. The vector has only " << v.size() << " elements.\n";
+				}
+			}
+			else {
+				cout << "\n\tThe vector is empty. No elements to access.\n";
+			}
+			break;
+		}
+		case 0: return;
+		}
+
+		cout << "\n\n\t";
+		system("pause");
+	} while (true);
+}
+
+void VectorListContainer()
+{
+	Application list_Apply;
+
+	do
+	{
+		system("cls");
+		menu3();
+		switch (toupper(inputChar("\n\t\tOption: ")))
+		{
+		case '0': return;
+		case 'A': list_Apply.set_List(inputInteger("\n\tAdd an integer: ")); break;
+		case 'B': {
+			//if value is not in list, error
+			int user_Value = inputInteger("\n\t Delete an integer: ");
+			try {
+				list_Apply.delete_List(user_Value);
+			}
+			catch (const invalid_argument& error) {
+				cout << "\n\t" << error.what() << to_string(user_Value) << ".";
+			}
+		}break;
+		case 'C': {
+			if (list_Apply.get_Empty()) {
+				cout << "\n\tERROR: Empty List. Please input integer (Option A)";
+				break;
+			}
+
+			cout << list_Apply;
+		}; break;
+		case 'D': {
+			if (list_Apply.get_Empty()) {
+				cout << "\n\tERROR: Empty List. Please input integer (Option A)";
+				break;
+			}
+
+			cout << list_Apply.get_Freq();
+		}; break;
+		default: cout << "\t\tERROR: - Invalid option. Please re-enter"; break;
+		}
+		cout << "\n";
+		system("pause");
+	} while (true);
+
+}
+
+void menu3()
+{
+	cout << "\n\t3> Application using Vector and/or List container";
+	cout << "\n\t" << string(100, char(205));
+	cout << "\n\t\tA> Add an integer";
+	cout << "\n\t\tB> Delete an integer";
+	cout << "\n\t\tC> Display input integers";
+	cout << "\n\t\tD> Display frequencies of integers";
+	cout << "\n\t" << string(100, char(196));
+	cout << "\n\t\t0> return";
+	cout << "\n\t" << string(100, char(205));
+}
