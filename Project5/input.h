@@ -4,6 +4,24 @@
 
 using namespace std;
 
+//PreCondition: spaces (boolean true or false)
+//PostCondition: returns a string including space character(s) or without space character 
+string inputString(string prompt, bool spaces)
+{
+	string input = "";
+
+	cout << prompt;
+	if (spaces)
+		getline(cin, input);
+	else
+	{
+		cin >> input;
+		cin.clear();
+		cin.ignore(999, '\n');
+	}
+	return input;
+}
+
 //return an input char
 char inputChar(string prompt, char yes, char no)
 {

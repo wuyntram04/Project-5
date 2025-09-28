@@ -287,10 +287,8 @@ void listOperation()
 		case 'Q':
 		{
 			student stu;
-			string name;
-			cout << "\t\tEnter a new student name: ";
-			getline(cin, name);
-			stu.setName(name);
+
+			stu.setName(inputString("\t\tEnter a new student name: ", true));
 
 			switch (inputInteger("\t\tEnter the his/her level (1-Freshman, 2-Sophmore, 3-Junior, or 4-Senior): ", 1, 4))
 			{
@@ -357,11 +355,7 @@ void listOperation()
 		cout << "\n\n";
 		system("pause");
 
-
-		
 	}
-		
-	
 }
 
 void list_PushTo(list<student> &list, bool push_front)
@@ -375,34 +369,28 @@ void list_PushTo(list<student> &list, bool push_front)
 		cout << "\n\tThe input file, INPUT.DAT, does not exist";
 		return;
 	}
-		
-	student obj;
 
-	string token;
+	string name;
+	string gradeLevel;
+	string GPA;
 
 	while (!dataFile.eof())
 	{
-		getline(dataFile, token, ','); 
-		obj.setName(token);
+		if (getline(dataFile, name, ',') && getline(dataFile, gradeLevel, ',') && getline(dataFile, GPA, '\n')) {
 
-		getline(dataFile, token, ',');
-		obj.setGradeLevel(token);
+			student newStudent;
+			newStudent.setName(name);
+			newStudent.setGradeLevel(gradeLevel);
+			newStudent.setGPA(stod(GPA));
 
-		getline(dataFile, token, '\n');
-
-		if (token == "")
-		{
-			break;
+			if (push_front)
+				list.push_front(newStudent);
+			else
+				list.push_back(newStudent);
 		}
-
-		obj.setGPA(stod(token));
-
-		if (push_front)
-			list.push_front(obj);
-		else
-			list.push_back(obj);
 	}
 	
+	dataFile.close();
 	cout << "\n\t\tThe list now has " << list.size() << " elements.";
 
 }
