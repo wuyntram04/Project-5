@@ -387,7 +387,7 @@ void VectorFunction()
 			cout << "\n\t\tvector (v1) is empty after swapped with vector (v2).\n";
 			cout << "\n\t\tvector (v2) after swapped with vector (v1).\n";
 
-			displayVector(v);
+			displayVector(v2);
 
 			break;
 		}
@@ -786,4 +786,5 @@ void menu3()
 	cout << "\n\t" << string(100, char(196));
 	cout << "\n\t\t0> return";
 	cout << "\n\t" << string(100, char(205));
+
 }
